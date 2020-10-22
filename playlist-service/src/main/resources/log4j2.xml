@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<Configuration status="warn" packages="">
+	<Properties>
+		<Property name="baseDir">/tmp/logs</Property>
+	</Properties>
+	<Appenders>
+		<RollingFile name="RollingFile" fileName="${baseDir}/app.log" filePattern="${baseDir}/app-%d{yyyy-MM-dd}_%i.log.zip">
+			<PatternLayout pattern="%d %p [%c] %m%n" />
+			<Policies>
+				<CronTriggeringPolicy schedule="0 0 0 * * ?" evaluateOnStartup="true" />
+				<SizeBasedTriggeringPolicy size="100 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="10">
+				<Delete basePath="${baseDir}" maxDepth="2">
+					<IfFileName glob="app-*.log.zip" />
+					<IfLastModified age="7d" />
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingFile>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d %p [%c] %m%n" />
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Root level="DEBUG">
+			<AppenderRef ref="RollingFile" />
+		</Root>
+		<Logger name="com.desafio" level="INFO">
+			<AppenderRef ref="Console" />
+		</Logger>
+	</Loggers>
+</Configuration>
